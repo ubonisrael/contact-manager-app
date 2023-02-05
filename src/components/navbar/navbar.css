@@ -1,0 +1,120 @@
+.navbar {
+  width: 100vw;
+  height: 5rem;
+  color: var(--clr-text);
+  background: var(--clr-secondarybg);
+}
+
+.navbar__header {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.logo {
+    font-size: 2rem;
+}
+
+.navbar__header-title {
+  text-transform: uppercase;
+}
+
+.navbar__header-toggle-btn {
+  color: var(--clr-secondary);
+  background: transparent;
+  border-color: transparent;
+  border-radius: var(--radius);
+  transition: var(--transition);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__center {
+  height: 0;
+  overflow: hidden;
+  transition: var(--transition);
+  background-color: var(--clr-tertiarybg);
+}
+
+.show-links {
+  height: 10rem;
+}
+
+.navbar__center__links p {
+  color: var(--clr-primary);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: var(--spacing);
+  display: block;
+  padding: 0.5rem 1rem;
+  transition: var(--transition);
+}
+
+.navbar__center__links li p {
+    color: var(--clr-text);
+}
+
+.navbar__center__links li:last-child p:hover {
+  background: var(--clr-secondary);
+  color: var(--clr-primary);
+  padding-left: 1.5rem;
+}
+
+.navbar__center__theme-btn {
+  color: var(--clr-secondary);
+  background: transparent;
+  border-color: transparent;
+  transition: var(--transition);
+  cursor: pointer;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__center__theme-btn:hover {
+  color: var(--clr-primary);
+  background-color: var(--clr-secondary);
+}
+
+@media screen and (max-width: 350px) {
+  .logo {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 768px) {
+    .navbar {
+        height: 6rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .navbar__center {
+        height: auto;
+        display: flex;
+        align-items: center;
+        background: var(--clr-secondarybg);
+    }
+
+    .navbar__center__links {
+        display: flex;
+        align-items: center;
+    }
+
+  .navbar__header-toggle-btn {
+    display: none;
+  }
+
+  .logo {
+    font-size: 3rem;
+  }
+
+  .navbar__center__links li:last-child p:hover {
+    padding-left: 1rem;
+  }
+}
