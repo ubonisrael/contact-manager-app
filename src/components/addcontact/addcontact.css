@@ -1,0 +1,36 @@
+.addcontact {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    transition: var(--transition);
+    z-index: 99;
+}
+
+.addcontact__container {
+    width: 80vw;
+    max-width: var(--max-width);
+    height: 80vh;
+    padding: 1rem;
+    background: var(--clr-secondarybg);
+    border-radius: var(--radius);
+    box-shadow: var(--light-shadow);
+}
+
+.addcontact__container-closebtn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.addcontact__container-closebtn:hover {
+    color: var(--clr-red);
+    transform: scale(1.2);
+}

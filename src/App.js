@@ -3,6 +3,8 @@ import './components/welcome/welcome'
 import "./App.css";
 import Welcome from './components/welcome/welcome';
 import Navbar from './components/navbar/navbar'
+import Addcontactbtn from './components/addcontactbtn/addcontactbtn';
+import Addcontact from './components/addcontact/addcontact';
 
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)")
 const currentTheme = localStorage.getItem('theme')
@@ -40,10 +42,20 @@ function App() {
     localStorage.setItem('theme', theme)
   };
 
+  //function that handles the addcontact event
+  const handleAddContact = () => {
+    console.log('add contact btn clicked');
+  }
+
   return (
     <div>
       {user
-      ? <Navbar theme={theme} handleTheme={handleTheme} handleLogOut={handleLogOut}/>
+      ? 
+      <>
+      <Navbar theme={theme} handleTheme={handleTheme} handleLogOut={handleLogOut}/>
+      <Addcontactbtn addcontact={handleAddContact}/>
+      <Addcontact />
+      </>
       : <Welcome signin={handleSignIn} theme={theme} handleTheme={handleTheme} />}
     </div>
   );
