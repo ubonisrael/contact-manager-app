@@ -68,12 +68,15 @@ break
     // functions that handle input change forms
     const handleFirstname = e => {
         setFirstname(e.target.value)
+if (error.firstname) {setError({...error, error.firstname: ''})}
     }
     const handlePhone = e => {
         setPhone(e.target.value)
+if (error.phone) {setError({...error, error.phone: ''})}
     }
     const handleEmail = e => {
         setEmail(e.target.value)
+if (error.email) {setError({...error, error.email: ''})}
     }
     //other inputs
     const handleInput = e => {
