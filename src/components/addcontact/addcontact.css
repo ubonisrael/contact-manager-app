@@ -83,6 +83,21 @@
     justify-content: center;
 }
 
+.addcontact__form__details-avatar-label {
+width: 6rem;
+height: 2rem;
+border-radius: var(--radius);
+background: var(--clr-secondary);
+color: var(--clr-primary);
+cursor: pointer;
+}
+
+.addcontact__form__details-avatar-label:hover{
+background: var(--clr-primary);
+color: var(--clr-secondary);
+border: 1px solid var(--clr-secondary)
+}
+
 .addcontact__form__details-avatar-icon{
     font-size: 4rem;
     margin: 0.5rem 0;
