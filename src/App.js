@@ -23,7 +23,7 @@ function loadFromLocalStorage () {
 
 function App() {
   const [user, setUser] = useState(false)
-  const [contactlist, setList] useState(list)
+  const [contacts, setContacts] useState(list)
   const [theme, setTheme] = useState()
   const [showForm, setShowForm] = useState(false)
   const [avatar, setAvatar] = useState()
@@ -32,7 +32,7 @@ function App() {
   const handleAddContact = e => {
     e.preventDefault()
     const form = document.forms[0]
-    setList([...contactlist, {
+    setContacts([...contacts, {
      firstname: form.firstname.value,
      midname: form.midname.value,
 surname: form.surname.value,
@@ -46,7 +46,7 @@ description: form.desc.value,
   //Sets contact to local storage
   useEffect(() => {
     localstorage.setItem('contacts', JSON stringify(contactlist))
-}, [contactlist])
+}, [contacts])
 
   //function handles the contact form will be displayed
   const showAddContact = () => {
