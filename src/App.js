@@ -15,10 +15,53 @@ if (currentTheme === 'dark') {
   document.body.classList.toggle('light-theme')
 }
 
+let list
+
+function loadFromLocalStorage () {
+  list = JSON.parse(localStorage.getItem("contacts"))
+}
+
 function App() {
   const [user, setUser] = useState(false)
+  const [contactlist, setList] useState(list)
   const [theme, setTheme] = useState()
+  const [showForm, setShowForm] = useState(false)
+  const [avatar, setAvatar] = useState()
+
+  //Handles add contact
+  const handleAddContact = e => {
+    e.preventDefault()
+    const form = document.forms[0]
+    setList([...contactlist, {
+     firstname: form.firstname.value,
+     midname: form.midname.value,
+surname: form.surname.value,
+telephone: form.phone.value,
+email: form.email.value,
+gender: form.gender.value,
+address: form.address.value,
+description: form.desc.value,
+  }
+
+  //Sets contact to local storage
+  useEffect(() => {
+    localstorage.setItem('contacts', JSON stringify(contactlist))
+}, [contactlist])
+
+  //function handles the contact form will be displayed
+  const showAddContact = () => {
+    setShowForm(prev => !prev)
+   }
   
+  //function handling the image file upload and display
+  const updateAvatar = () => {
+    const avatar = document.querySelector('.avatar')
+    const avatarFile = avatar.files
+    if (validFileType(avatarFile) {
+       const avatarSrc = URL.createObjectURL(avatarFile)
+       setAvatar(avatarSrc)
+     }
+}
 
   // function handles signing in event
   const handleSignIn = () => {
@@ -42,19 +85,14 @@ function App() {
     localStorage.setItem('theme', theme)
   };
 
-  //function that handles the addcontact event
-  const handleAddContact = () => {
-    console.log('add contact btn clicked');
-  }
-
   return (
     <div>
       {user
       ? 
       <>
       <Navbar theme={theme} handleTheme={handleTheme} handleLogOut={handleLogOut}/>
-      <Addcontactbtn addcontact={handleAddContact}/>
-      <Addcontact />
+      <Addcontactbtn addcontact={showAddContact}/>
+      {showForm ? <Addcontact close={showAddContact} avatar={avatar} updateAvatar={updateAvatar} submit={handleAddContact}/>: null}
       </>
       : <Welcome signin={handleSignIn} theme={theme} handleTheme={handleTheme} />}
     </div>
