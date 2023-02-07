@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useRef} from 'react'
 import { FaTimes, FaUser, FaUserAlt, FaUserCircle } from 'react-icons/fa'
 
 import './addcontact.css'
@@ -14,22 +14,56 @@ const formFields = [
     {label: 'Description', name: 'desc'},
 ]
 
-const Addcontact = () => {
-    const avatar = document.querySelector('.avatar')
+const emailRegex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')
 
-    //function that handles submitting the form ?? passed down from app
-    const submit = e => {
-        e.preventDefault()
-        console.log('contact added');
-    }
-
-    const [firstname, setFirstname] = useState('')
+const Addcontact = ({show, avatar, updateAvatar, submit}) => {
+const [firstname, setFirstname] = useState('')
     const [phone, setPhone] = useState('')
     const [email, setEmail] = useState('')
     const [input, setInput] = useState('')
 
     const [error, setError] = useState({firstname: '', phone: '', email: ''})
 
+const firstRef = useRef()
+const phoneRef = useRef()
+const emailRef = useRef()
+
+    //function that handles submitting the form ?? passed down from app
+    const handleSubmit = e => {
+        e.preventDefault()
+if (!firstname.trim()) {
+showError('firstname')
+firstRef.current.style.outline = 'red'
+firstRef.current.focus()
+return
+} else if (!phone.trim()) {
+showError('phone')
+phoneRef.current.style.outline = 'red'
+phoneRef.current.focus()
+return
+} else if (emailRegex.test(email) && email.trim()) {
+showError('email')
+emailRef.current.style.outline = 'red'
+emailRef.current.focus()
+return
+}
+        submit()
+    }
+
+//handles error logging
+const showError = props => {
+switch (props) {
+case 'firstname':
+setError({...error, error.firstname: 'Please fill in the first name'})
+break
+case 'phone':
+setError({...error, phonee: 'Please fill in the phone number'})
+break
+case 'email':
+setError({...error, error.email: 'Please fill in a valid email address e.g you@example.com'})
+break
+}
+}
 
     // functions that handle input change forms
     const handleFirstname = e => {
@@ -59,7 +93,7 @@ const Addcontact = () => {
                     {avatar 
                     ? <img src='' alt='avatar' className='addcontact__form__details-image'/>
                     : <span className='addcontact__form__details-avatar-icon'><FaUserCircle  /></span>}
-                    <label htmlFor='avatar'>Select Contact Image <input type='file' id='avatar' className='addcontact__form__details-avatar-picker' name='avatar' accept='image/*' /></label>
+                    <label htmlFor='avatar' className='addcontact__form__details-avatar-label >Select Contact Image <input type='file' id='avatar' className='addcontact__form__details-avatar-picker' name='avatar' accept='image/*' /></label>
                 </div>
                 {formFields.map((field, i) => {
                     return (
@@ -73,7 +107,13 @@ const Addcontact = () => {
                                 <option value='female'>Female</option>
                                 <option value='other'>Other</option>
                             </select>
-                            : <input id={field.name} className='addcontact__form__details-input'
+                            : <input
+ref={field.name === 'firstname' ? firstRef
+                                : field.name === 'phone' ? phoneRef
+                                : field.name === 'email' ? emailRef
+                                : null}
+id={field.name} 
+className='addcontact__form__details-input'
                                 type={field.name === 'phone' ? 'number' : 'text'}
                                 onChange={field.name === 'firstname' ? handleFirstname
                                 : field.name === 'phone' ? handlePhone
