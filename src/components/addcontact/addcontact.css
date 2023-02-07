@@ -127,6 +127,14 @@ border: 1px solid var(--clr-secondary)
     height: 6rem;
 }
 
+.error {
+width: 100%;
+height: 1.5rem;
+margin-top: 2px;
+color: white;
+background: red
+}
+
 .addcontact__form-btn {
     width: 6rem;
     height: 2rem;
