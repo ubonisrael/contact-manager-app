@@ -8,6 +8,7 @@
     place-items: center;
     transition: var(--transition);
     z-index: 99;
+    background: rgba(205, 223, 226, 0.582);
 }
 
 .addcontact__container {
@@ -16,8 +17,33 @@
     height: 80vh;
     padding: 1rem;
     background: var(--clr-secondarybg);
-    border-radius: var(--radius);
     box-shadow: var(--light-shadow);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    mask-image: linear-gradient(to top, transparent, black), linear-gradient(to left, transparent 4px, black 4px);
+    mask-size: 100% 200000px;
+    mask-position: left bottom;
+    transition: mask position 0.3s, ;
+}
+
+.addcontact__container:hover {
+    mask-position: left top;
+}
+
+.addcontact__container::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* .addcontact__container::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 4px var(--clr-secondary);
+    border-radius: var(--radius)
+} */
+
+.addcontact__container::-webkit-scrollbar-thumb {
+    border-radius: var(--radius);
+    -webkit-box-shadow: inset 0 0 4px var(--clr-secondary);
 }
 
 .addcontact__container-closebtn {
@@ -33,4 +59,74 @@
 .addcontact__container-closebtn:hover {
     color: var(--clr-red);
     transform: scale(1.2);
+}
+
+.addcontact__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.addcontact__form__header {
+    margin-top: 2rem;
+}
+
+.addcontact__form__header h2 {
+    text-transform: capitalize;
+}
+
+.addcontact__form__details-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.addcontact__form__details-avatar-icon{
+    font-size: 4rem;
+    margin: 0.5rem 0;
+}
+
+.addcontact__form__details-avatar-picker {
+    opacity: 0;
+}
+
+.addcontact__form__details-container {
+    width: 90%;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius);
+    background: var(--clr-tertiarybg);
+}
+
+.addcontact__form__details-input {
+    padding-left: 0.25rem;
+    height: 1.5rem;
+    border: none;
+}
+
+.desc {
+    height: 6rem;
+}
+
+.addcontact__form-btn {
+    width: 6rem;
+    height: 2rem;
+    padding: 0.5rem;
+    margin: 1rem;
+    border: none;
+    color: var(--clr-primary);
+    background: var(--clr-secondary);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.addcontact__form-btn:hover {
+    color: var(--clr-secondary);
+    background: var(--clr-primary);
+    border: 1px solid var(--clr-secondary);
 }

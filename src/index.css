@@ -6,7 +6,7 @@
     --radius: 8px;
     --transition: all 0.3s linear;
     --light-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
-    --max-width: 900px;
+    --max-width: 700px;
     --spacing:0.1rem;
     --clr-red: red;
 }
@@ -22,7 +22,7 @@ body {
     --clr-text: rgb(4, 1, 27);
     --clr-primarybg: rgb(165, 193, 197);
     --clr-secondarybg: rgb(205, 223, 226);
-    --clr-tertiarybg: rgb(222, 230, 236);
+    --clr-tertiarybg: rgb(240, 243, 245);
     --clr-primary: rgb(222, 230, 236);
     --clr-secondary: black;
 }

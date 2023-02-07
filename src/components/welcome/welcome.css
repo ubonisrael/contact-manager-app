@@ -30,6 +30,7 @@
 
 .welcome__body {
     width: 90%;
+    max-width: var(--max-width);
     height: 25rem;
     display: flex;
     align-items: center;
