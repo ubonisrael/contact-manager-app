@@ -33,17 +33,17 @@ const emailRef = useRef()
         e.preventDefault()
 if (!firstname.trim()) {
 showError('firstname')
-firstRef.current.style.outline = 'red'
+firstRef.current.style.outline = 'solid red'
 firstRef.current.focus()
 return
 } else if (!phone.trim()) {
 showError('phone')
-phoneRef.current.style.outline = 'red'
+phoneRef.current.style.outline = 'solid red'
 phoneRef.current.focus()
 return
 } else if (emailRegex.test(email) && email.trim()) {
 showError('email')
-emailRef.current.style.outline = 'red'
+emailRef.current.style.outline = 'solid red'
 emailRef.current.focus()
 return
 }
