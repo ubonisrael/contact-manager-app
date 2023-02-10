@@ -3,6 +3,7 @@ import "./components/welcome/welcome";
 import "./App.css";
 import Welcome from "./components/welcome/welcome";
 import Navbar from "./components/navbar/navbar";
+import Contactlist from "./components/contacts/contacts";
 import Addcontactbtn from "./components/addcontactbtn/addcontactbtn";
 import Addcontact from "./components/addcontact/addcontact";
 
@@ -52,7 +53,7 @@ const [selected, setSelect] = useState([]);
         gender: form.gender.value,
         address: form.address.value,
         description: form.desc.value,
-ID: `${form.firstname}${IDgen}`
+ID: `${form.firstname}${IDgen()}`
       },
     ]);
   };
@@ -137,6 +138,7 @@ setSelect([...selected, contactIndex])
             handleTheme={handleTheme}
             handleLogOut={handleLogOut}
           />
+<Contactlist contacts={contact} avatar={avatar} delMultiple={handleDeleteMultiple} del={handleDelete} select={handleSelect} show={showAddContact}/>
           <Addcontactbtn addcontact={showAddContact} />
           {showForm ? (
             <Addcontact
