@@ -3,14 +3,14 @@ import React from "react";
 import Contactcard from "../contactcard/contactcard";
 import "./contacts.css";
 
-const Contactlist = ({ contacts, mulDelete, edit, del, select }) => {
+const Contactlist = ({ contacts, avatar, delMultiple, edit, del, select, show }) => {
   return (
     <div className="contactlist">
       <div className="contactlist__header">
         <h2 className="contactlist__header-title">CONTACTS</h2>
         <button
           className="contactlist__header-deletemultiple-btn"
-          onClick={mulDelete}
+          onClick={delMultiple}
         ></button>
       </div>
       <div className="contactlist__underline"></div>
@@ -25,10 +25,10 @@ const Contactlist = ({ contacts, mulDelete, edit, del, select }) => {
             return (
               <Contactcard
                 key={i}
-                index={i}
                 contacts={contacts}
+avatar={avatar}
                 edit={edit}
-                delete={del}
+                del={del}
                 select={select}
               />
             );
