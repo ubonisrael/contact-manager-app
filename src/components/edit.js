@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { FaTimes, FaUserCircle } from "react-icons/fa";
 
-import "./addcontact.css";
+import "./editcontact.css";
 
 const formFields = [
   { label: "First Name", name: "firstname" },
