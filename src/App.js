@@ -35,6 +35,8 @@ function App() {
   const [contacts, setContacts] = useState(list);
   const [theme, setTheme] = useState();
   const [showForm, setShowForm] = useState(false);
+const [showEditForm, setEditForm] = useState(false);
+const [editContact, setEdit] = useState();
   const [avatar, setAvatar] = useState();
 const [selected, setSelect] = useState([]);
 
@@ -56,7 +58,45 @@ const [selected, setSelect] = useState([]);
 ID: `${form.firstname}${IDgen()}`
       },
     ]);
+showAddContact()
   };
+
+//handles editing contacts
+const handleEdit = (i) => {
+const contact = contacts.find(contact => contact.ID === i)
+setEdit(contact)
+showEdit()
+}
+
+//Toggles the display of the edit form
+const showEdit = () => {
+setEditForm(prev => !prev)
+}
+
+//handles submission of edited contact
+const handleEditContact = () => {
+const editedContact = {
+        firstname: form.firstname.value,
+        midname: form.midname.value,
+        surname: form.surname.value,
+        telephone: form.phone.value,
+        email: form.email.value,
+        gender: form.gender.value,
+        address: form.address.value,
+        description: form.desc.value,
+ID: editContact.ID
+      }
+
+setContact(prev => prev.map((contact, i) => {
+if (contact.ID === editedContact.ID) {
+return editedContact
+} else {
+return contact
+}
+})
+
+showEdit()
+}
 
 //handles the deletion of a single contact
 const handleDelete = (i) => {
@@ -146,6 +186,15 @@ setSelect([...selected, contactIndex])
               avatar={avatar}
               updateAvatar={updateAvatar}
               submit={handleAddContact}
+            />
+          ) : null}
+          {showEditForm ? (
+            <Editcontact
+              contact={editContact}
+              close={showEdit}
+              avatar={avatar}
+              updateAvatar={updateAvatar}
+              submit={handleEditContact}
             />
           ) : null}
         </>
