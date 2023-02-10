@@ -16,7 +16,7 @@ const formFields = [
 
 const emailRegex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
 
-const Editcontact = ({ show, avatar, updateAvatar, submit }) => {
+const Editcontact = ({ contact, show, avatar, updateAvatar, submit }) => {
   const [details, setDetails] = useState({
 firstname : contact.firstname,
 midname : contact.midname,
