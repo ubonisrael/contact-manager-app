@@ -15,11 +15,12 @@ const Contactcard = ({ contact, index, edit, del, select }) => {
 
   //Function that handles the event when the dropdown button is clicked
   const handleDropdown = () => {
+e.stopPropagation()
     dropdownRef.current.classList.toggle("dropped");
   };
 
   return (
-    <div ref={cardRef} className="contactcard" onClick={handleSelect}>
+    <div ref={cardRef} className="contactcard" onClick={()=>handleSelect(index)}>
       <div className="contactcard__avatarcontainer">
         {contact.avatar ? (
           <img
@@ -45,14 +46,20 @@ const Contactcard = ({ contact, index, edit, del, select }) => {
         </button>
         <button
           className="contactcard__details-btn"
-          onClick={() => edit(index)}
+          onClick={e => {
+e.stopPropagation()
+edit(index)}
+}
         >
           edit
         </button>
-        <button className="contactcard__details-btn" onClick={() => del(index)}>
+        <button className="contactcard__details-btn" onClick={(e) => {
+e.stopPropagation()
+del(index)}
+}>
           delete
         </button>
-        <button className="contactcard__details-btn">marked</button>
+        <button className="contactcard__details-btn" disabled>marked</button>
       </div>
       <div className="contactcard__details-underline"></div>
       <div ref={dropdownRef} className="contactcard__details__other">
