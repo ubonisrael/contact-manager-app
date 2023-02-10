@@ -16,9 +16,17 @@ if (currentTheme === "dark") {
 }
 
 let list;
-
-function loadFromLocalStorage() {
+if (localStorage.getItem("contacts")) {
   list = JSON.parse(localStorage.getItem("contacts"));
+}
+
+
+function IDgen() {
+let id = ''
+for (let i =0;i<5;i++) {
+id += Math.floor(Math.random()*10)
+}
+return ID
 }
 
 function App() {
@@ -27,10 +35,11 @@ function App() {
   const [theme, setTheme] = useState();
   const [showForm, setShowForm] = useState(false);
   const [avatar, setAvatar] = useState();
+const [selected, setSelect] = useState([]);
 
   //Handles add contact
-  const handleAddContact = (e) => {
-    e.preventDefault();
+  const handleAddContact = () => {
+    
     const form = document.forms[0];
     setContacts([
       ...contacts,
@@ -43,9 +52,37 @@ function App() {
         gender: form.gender.value,
         address: form.address.value,
         description: form.desc.value,
+ID: `${form.firstname}${IDgen}`
       },
     ]);
   };
+
+//handles the deletion of a single contact
+const handleDelete = (i) => {
+const contactIndex = contacts.findIndex(contact => contact.ID === i)
+setContacts(prev => prev.slice(0, contactIndex).concat(prev.slice(1 + contactIndex)))
+}
+
+//handles the deletion of multiple contacts
+const handleDeleteMultiple = () => {
+const newContacts = contacts.filter((contact, i) => {
+if (selected.indexOf(contact.ID) < 0) {
+return contact
+}
+})
+setContacts(newContacts)
+setSelect([])
+}
+
+//handles the selection of a contact
+const handleSelect = (i) => {
+const contactIndex = contacts.findIndex(contact => contact.ID === i)
+if (selected.indexOf(contactIndex)) {
+setSelect(prev => prev.slice(0, contactIndex).concat(prev.slice(1 + contactIndex)))
+} else {
+setSelect([...selected, contactIndex])
+}
+}
 
   //Sets contact to local storage
   useEffect(() => {
