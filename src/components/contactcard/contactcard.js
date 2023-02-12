@@ -14,7 +14,7 @@ const Contactcard = ({ contact, index, edit, del, select }) => {
   };
 
   //Function that handles the event when the dropdown button is clicked
-  const handleDropdown = () => {
+  const handleDropdown = e => {
 e.stopPropagation()
     dropdownRef.current.classList.toggle("dropped");
   };

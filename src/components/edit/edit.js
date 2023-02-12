@@ -77,19 +77,19 @@ description : contact.description,
 
   // functions that handle input change forms
   const handleFirstname = (e) => {
-    setDetails({... details, details.firstname: e.target.value});
+    setDetails({... details, firstname: e.target.value});
     if (error.firstname) {
       setError({ ...error, firstname: "" });
     }
   };
   const handlePhone = (e) => {
-    setDetails({... details, details.phone: e.target.value});
+    setDetails({... details, phone: e.target.value});
     if (error.phone) {
       setError({ ...error, phone: "" });
     }
   };
   const handleEmail = (e) => {
-    setDetails({... details, details.email: e.target.value});
+    setDetails({... details, email: e.target.value});
     if (error.email) {
       setError({ ...error, email: "" });
     }
@@ -97,15 +97,15 @@ description : contact.description,
   //other inputs
 
 const handleMidname = (e) => {
-    setDetails({... details, details.midname: e.target.value});
+    setDetails({... details, midname: e.target.value});
   };
 
 const handleSurname = (e) => {
-    setDetails({... details, details.surname: e.target.value});
+    setDetails({... details, surname: e.target.value});
   };
 
 const handleAddress = (e) => {
-    setDetails({... details, details.address: e.target.value});
+    setDetails({... details, address: e.target.value});
   };
 
 
@@ -115,7 +115,7 @@ const handleAddress = (e) => {
         <button className="addcontact__container-closebtn" onClick={show}>
           <FaTimes />
         </button>
-        <form className="addcontact__form">
+        <form className="addcontact__form-edit">
           <div className="addcontact__form__header">
             <h2>Add Contact</h2>
           </div>

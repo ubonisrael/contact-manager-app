@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import "./components/welcome/welcome";
+import { auth } from "./firebase";
+import { storage } from "./firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import "./App.css";
 import Welcome from "./components/welcome/welcome";
 import Navbar from "./components/navbar/navbar";
 import Contactlist from "./components/contacts/contacts";
 import Addcontactbtn from "./components/addcontactbtn/addcontactbtn";
 import Addcontact from "./components/addcontact/addcontact";
+import Editcontact from "./components/edit/edit";
 
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 const currentTheme = localStorage.getItem("theme");
@@ -17,32 +22,28 @@ if (currentTheme === "dark") {
 }
 
 let list;
-if (localStorage.getItem("contacts")) {
-  list = JSON.parse(localStorage.getItem("contacts"));
-}
-
+console.log(localStorage.getItem("contacts"));
 
 function IDgen() {
-let id = ''
-for (let i =0;i<5;i++) {
-id += Math.floor(Math.random()*10)
-}
-return ID
+  let id = "";
+  for (let i = 0; i < 5; i++) {
+    id += Math.floor(Math.random() * 10);
+  }
+  return id;
 }
 
 function App() {
-  const [user, setUser] = useState(false);
+  const [user] = useAuthState(auth);
   const [contacts, setContacts] = useState(list);
   const [theme, setTheme] = useState();
   const [showForm, setShowForm] = useState(false);
-const [showEditForm, setEditForm] = useState(false);
-const [editContact, setEdit] = useState();
+  const [showEditForm, setEditForm] = useState(false);
+  const [editContact, setEdit] = useState();
   const [avatar, setAvatar] = useState();
-const [selected, setSelect] = useState([]);
+  const [selected, setSelect] = useState([]);
 
   //Handles add contact
   const handleAddContact = () => {
-    
     const form = document.forms[0];
     setContacts([
       ...contacts,
@@ -55,75 +56,82 @@ const [selected, setSelect] = useState([]);
         gender: form.gender.value,
         address: form.address.value,
         description: form.desc.value,
-ID: `${form.firstname}${IDgen()}`
+        ID: `${form.phone.value}A${IDgen()}`,
       },
     ]);
-showAddContact()
+    showAddContact();
   };
 
-//handles editing contacts
-const handleEdit = (i) => {
-const contact = contacts.find(contact => contact.ID === i)
-setEdit(contact)
-showEdit()
-}
+  //handles editing contacts
+  const handleEdit = (i) => {
+    const contact = contacts.find((contact) => contact.ID === i);
+    setEdit(contact);
+    showEdit();
+  };
 
-//Toggles the display of the edit form
-const showEdit = () => {
-setEditForm(prev => !prev)
-}
+  //Toggles the display of the edit form
+  const showEdit = () => {
+    setEditForm((prev) => !prev);
+  };
 
-//handles submission of edited contact
-const handleEditContact = () => {
-const editedContact = {
-        firstname: form.firstname.value,
-        midname: form.midname.value,
-        surname: form.surname.value,
-        telephone: form.phone.value,
-        email: form.email.value,
-        gender: form.gender.value,
-        address: form.address.value,
-        description: form.desc.value,
-ID: editContact.ID
+  //handles submission of edited contact
+  const handleEditContact = () => {
+    const form = document.forms[1];
+    const editedContact = {
+      firstname: form.firstname.value,
+      midname: form.midname.value,
+      surname: form.surname.value,
+      telephone: form.phone.value,
+      email: form.email.value,
+      gender: form.gender.value,
+      address: form.address.value,
+      description: form.desc.value,
+      ID: editContact.ID,
+    };
+
+    setContacts((prev) =>
+      prev.map((contact, i) => {
+        if (contact.ID === editedContact.ID) {
+          return editedContact;
+        } else {
+          return contact;
+        }
+      })
+    );
+
+    showEdit();
+  };
+
+  //handles the deletion of a single contact
+  const handleDelete = (i) => {
+    const contactIndex = contacts.findIndex((contact) => contact.ID === i);
+    setContacts((prev) =>
+      prev.slice(0, contactIndex).concat(prev.slice(1 + contactIndex))
+    );
+  };
+
+  //handles the deletion of multiple contacts
+  const handleDeleteMultiple = () => {
+    const newContacts = contacts.filter((contact, i) => {
+      if (selected.indexOf(contact.ID) < 0) {
+        return contact;
       }
+    });
+    setContacts(newContacts);
+    setSelect([]);
+  };
 
-setContact(prev => prev.map((contact, i) => {
-if (contact.ID === editedContact.ID) {
-return editedContact
-} else {
-return contact
-}
-})
-
-showEdit()
-}
-
-//handles the deletion of a single contact
-const handleDelete = (i) => {
-const contactIndex = contacts.findIndex(contact => contact.ID === i)
-setContacts(prev => prev.slice(0, contactIndex).concat(prev.slice(1 + contactIndex)))
-}
-
-//handles the deletion of multiple contacts
-const handleDeleteMultiple = () => {
-const newContacts = contacts.filter((contact, i) => {
-if (selected.indexOf(contact.ID) < 0) {
-return contact
-}
-})
-setContacts(newContacts)
-setSelect([])
-}
-
-//handles the selection of a contact
-const handleSelect = (i) => {
-const contactIndex = contacts.findIndex(contact => contact.ID === i)
-if (selected.indexOf(contactIndex)) {
-setSelect(prev => prev.slice(0, contactIndex).concat(prev.slice(1 + contactIndex)))
-} else {
-setSelect([...selected, contactIndex])
-}
-}
+  //handles the selection of a contact
+  const handleSelect = (i) => {
+    const contactIndex = contacts.findIndex((contact) => contact.ID === i);
+    if (selected.indexOf(contactIndex)) {
+      setSelect((prev) =>
+        prev.slice(0, contactIndex).concat(prev.slice(1 + contactIndex))
+      );
+    } else {
+      setSelect([...selected, contactIndex]);
+    }
+  };
 
   //Sets contact to local storage
   useEffect(() => {
@@ -145,11 +153,14 @@ setSelect([...selected, contactIndex])
 
   // function handles signing in event
   const handleSignIn = () => {
-    setUser(true);
+    const provider = new GoogleAuthProvider()
+    signInWithRedirect(auth, provider)
+    //addfirst time user to database
+    //addUser()
   };
   //function that handles logging out user
   const handleLogOut = () => {
-    setUser(false);
+    auth.signOut()
   };
 
   //function handles toggling theme event
@@ -178,7 +189,14 @@ setSelect([...selected, contactIndex])
             handleTheme={handleTheme}
             handleLogOut={handleLogOut}
           />
-<Contactlist contacts={contact} avatar={avatar} delMultiple={handleDeleteMultiple} del={handleDelete} select={handleSelect} show={showAddContact}/>
+          <Contactlist
+            contacts={contacts}
+            avatar={avatar}
+            delMultiple={handleDeleteMultiple}
+            del={handleDelete}
+            select={handleSelect}
+            show={showAddContact}
+          />
           <Addcontactbtn addcontact={showAddContact} />
           {showForm ? (
             <Addcontact
@@ -193,7 +211,6 @@ setSelect([...selected, contactIndex])
               contact={editContact}
               close={showEdit}
               avatar={avatar}
-              updateAvatar={updateAvatar}
               submit={handleEditContact}
             />
           ) : null}
