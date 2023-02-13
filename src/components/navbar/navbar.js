@@ -5,7 +5,7 @@ import { RxHamburgerMenu } from 'react-icons/rx'
 import { FaPortrait, FaRegSun, FaRegMoon, FaTimes } from 'react-icons/fa'
 import { IconContext } from 'react-icons'
 
-const Navbar = ({theme, handleTheme, handleLogOut}) => {
+const Navbar = ({theme, handleTheme, handleLogOut, displayName, photoURL}) => {
 
     const [toggled, setToggle] = useState(false)
     
@@ -29,10 +29,8 @@ const Navbar = ({theme, handleTheme, handleLogOut}) => {
                 <div className='navbar__center'>
                 <ul className='navbar__center__links'>
                     <li>
-                    <p>UserPix</p>
-                    </li>
-                    <li>
-                    <p>UserID</p>
+                    <img className='navbar__center__links-userPhoto' src={photoURL} alt='userPhoto'/>
+                    <p>{displayName}</p>
                     </li>
                     <li>
                         <p onClick={handleLogOut}>Log Out</p>

@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { auth } from "./firebase";
+import { auth, db } from "./firebase";
 import { storage } from "./firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  signInWithRedirect,
+  getRedirectResult,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import "./App.css";
 import Welcome from "./components/welcome/welcome";
@@ -11,6 +16,7 @@ import Contactlist from "./components/contacts/contacts";
 import Addcontactbtn from "./components/addcontactbtn/addcontactbtn";
 import Addcontact from "./components/addcontact/addcontact";
 import Editcontact from "./components/edit/edit";
+import { setDoc, collection, serverTimestamp } from "firebase/firestore";
 
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 const currentTheme = localStorage.getItem("theme");
@@ -21,8 +27,7 @@ if (currentTheme === "dark") {
   document.body.classList.toggle("light-theme");
 }
 
-let list;
-console.log(localStorage.getItem("contacts"));
+let list = [];
 
 function IDgen() {
   let id = "";
@@ -41,6 +46,8 @@ function App() {
   const [editContact, setEdit] = useState();
   const [avatar, setAvatar] = useState();
   const [selected, setSelect] = useState([]);
+
+  const { uid, displayName, photoURL } = user;
 
   //Handles add contact
   const handleAddContact = () => {
@@ -76,7 +83,7 @@ function App() {
 
   //handles submission of edited contact
   const handleEditContact = () => {
-    const form = document.forms[1];
+    const form = document.forms[0];
     const editedContact = {
       firstname: form.firstname.value,
       midname: form.midname.value,
@@ -152,15 +159,32 @@ function App() {
   };
 
   // function handles signing in event
-  const handleSignIn = () => {
-    const provider = new GoogleAuthProvider()
-    signInWithRedirect(auth, provider)
-    //addfirst time user to database
-    //addUser()
+  const handleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithRedirect(auth, provider);
+    const res = await getRedirectResult(auth);
+    if (res) {
+      if (res.additionalUserInfo.isNewUser) {
+        const userId = res.user.id;
+        const userData = {
+          displayName: res.user.displayName,
+          email: res.user.email,
+          photoURL: res.user.photoURL,
+        };
+        db.collection("users")
+          .doc(userId)
+          .set(userData)
+          .then(() => console.log("added user", userId, " to db"))
+          .catch((e) =>
+            console.log("error adding user", userId, " to db", e.message)
+          );
+      }
+    }
   };
+
   //function that handles logging out user
   const handleLogOut = () => {
-    auth.signOut()
+    auth.signOut();
   };
 
   //function handles toggling theme event
@@ -188,6 +212,8 @@ function App() {
             theme={theme}
             handleTheme={handleTheme}
             handleLogOut={handleLogOut}
+            displayName={displayName}
+            photoURL={photoURL}
           />
           <Contactlist
             contacts={contacts}

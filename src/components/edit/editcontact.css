@@ -1,4 +1,4 @@
-.addcontact {
+edit.editcontact {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,7 +11,7 @@
     background: rgba(205, 223, 226, 0.582);
 }
 
-.addcontact__container {
+.editcontact__container {
     width: 80vw;
     max-width: var(--max-width);
     height: 80vh;
@@ -28,11 +28,11 @@
     transition: mask position 0.3s, ;
 }
 
-.addcontact__container:hover {
+.editcontact__container:hover {
     mask-position: left top;
 }
 
-.addcontact__container::-webkit-scrollbar {
+.editcontact__container::-webkit-scrollbar {
     width: 4px;
 }
 
@@ -41,12 +41,12 @@
     border-radius: var(--radius)
 } */
 
-.addcontact__container::-webkit-scrollbar-thumb {
+.editcontact__container::-webkit-scrollbar-thumb {
     border-radius: var(--radius);
     -webkit-box-shadow: inset 0 0 4px var(--clr-secondary);
 }
 
-.addcontact__container-closebtn {
+.editcontact__container-closebtn {
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -57,34 +57,34 @@
     cursor: pointer;
 }
 
-.addcontact__container-closebtn:hover {
+.editcontact__container-closebtn:hover {
     color: var(--clr-red);
     transform: scale(1.2);
 }
 
-.addcontact__form {
+.editcontact__form {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
 }
 
-.addcontact__form__header {
+.editcontact__form__header {
     margin-top: 2rem;
 }
 
-.addcontact__form__header h2 {
+.editcontact__form__header h2 {
     text-transform: capitalize;
 }
 
-.addcontact__form__details-image-container {
+.editcontact__form__details-image-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.addcontact__form__details-avatar-label {
+.editcontact__form__details-avatar-label {
 width: 10rem;
 height: 2rem;
 display: flex;
@@ -96,22 +96,22 @@ color: var(--clr-primary);
 cursor: pointer;
 }
 
-.addcontact__form__details-avatar-label:hover{
+.editcontact__form__details-avatar-label:hover{
 background: var(--clr-primary);
 color: var(--clr-secondary);
 border: 1px solid var(--clr-secondary)
 }
 
-.addcontact__form__details-avatar-icon{
+.editcontact__form__details-avatar-icon{
     font-size: 4rem;
     margin: 0.5rem 0;
 }
 
-.addcontact__form__details-avatar-picker {
+.editcontact__form__details-avatar-picker {
     opacity: 0;
 }
 
-.addcontact__form__details-container {
+.editcontact__form__details-container {
     width: 90%;
     padding: 0.5rem;
     margin: 0.5rem;
@@ -121,7 +121,7 @@ border: 1px solid var(--clr-secondary)
     background: var(--clr-tertiarybg);
 }
 
-.addcontact__form__details-input {
+.editcontact__form__details-input {
     padding-left: 0.25rem;
     height: 1.5rem;
     border: none;
@@ -141,7 +141,7 @@ text-align: center;
 border-radius: 4px;
 }
 
-.addcontact__form-btn {
+.editcontact__form-btn {
     width: 6rem;
     height: 2rem;
     padding: 0.5rem;
@@ -154,7 +154,7 @@ border-radius: 4px;
     transition: var(--transition);
 }
 
-.addcontact__form-btn:hover {
+.editcontact__form-btn:hover {
     color: var(--clr-secondary);
     background: var(--clr-primary);
     border: 1px solid var(--clr-secondary);

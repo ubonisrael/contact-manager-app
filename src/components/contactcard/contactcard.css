@@ -7,6 +7,8 @@ display: flex;
 flex-direction: row;
 align-items: center;
 justify-content: flex-start;
+background: var(--clr-tertiarybg);
+border-radius: var(--radius);
 }
 
 .contactcard__avatarcontainer {

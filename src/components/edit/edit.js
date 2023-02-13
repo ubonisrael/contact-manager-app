@@ -18,15 +18,15 @@ const emailRegex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
 
 const Editcontact = ({ contact, show, avatar, updateAvatar, submit }) => {
   const [details, setDetails] = useState({
-firstname : contact.firstname,
-midname : contact.midname,
-surname : contact.firstname,
-email : contact.email,
-phone : contact.phone,
-gender : contact.gender,
-address : contact.address,
-description : contact.description,
-});
+    firstname: contact.firstname,
+    midname: contact.midname,
+    surname: contact.firstname,
+    email: contact.email,
+    phone: contact.phone,
+    gender: contact.gender,
+    address: contact.address,
+    description: contact.description,
+  });
 
   const [error, setError] = useState({ firstname: "", phone: "", email: "" });
 
@@ -68,7 +68,7 @@ description : contact.description,
       case "email":
         setError({
           ...error,
-          email: "Please fill in a valid email address e.g you@example.com",
+          email: "Please fill in a valid emaieditress e.g you@example.com",
         });
         break;
       default:
@@ -77,70 +77,70 @@ description : contact.description,
 
   // functions that handle input change forms
   const handleFirstname = (e) => {
-    setDetails({... details, firstname: e.target.value});
+    setDetails({ ...details, firstname: e.target.value });
     if (error.firstname) {
       setError({ ...error, firstname: "" });
     }
   };
   const handlePhone = (e) => {
-    setDetails({... details, phone: e.target.value});
+    setDetails({ ...details, phone: e.target.value });
     if (error.phone) {
       setError({ ...error, phone: "" });
     }
   };
   const handleEmail = (e) => {
-    setDetails({... details, email: e.target.value});
+    setDetails({ ...details, email: e.target.value });
     if (error.email) {
       setError({ ...error, email: "" });
     }
   };
+
   //other inputs
 
-const handleMidname = (e) => {
-    setDetails({... details, midname: e.target.value});
+  const handleMidname = (e) => {
+    setDetails({ ...details, midname: e.target.value });
   };
 
-const handleSurname = (e) => {
-    setDetails({... details, surname: e.target.value});
+  const handleSurname = (e) => {
+    setDetails({ ...details, surname: e.target.value });
   };
 
-const handleAddress = (e) => {
-    setDetails({... details, address: e.target.value});
+  const handleAddress = (e) => {
+    setDetails({ ...details, address: e.target.value });
   };
-
 
   return (
-    <div className="addcontact">
-      <div className="addcontact__container">
-        <button className="addcontact__container-closebtn" onClick={show}>
+    <div className="editcontact">
+      <div className="editcontact__container">
+        <button className="editcontact__container-closebtn" onClick={show}>
           <FaTimes />
         </button>
-        <form className="addcontact__form-edit">
-          <div className="addcontact__form__header">
-            <h2>Add Contact</h2>
+        <form className="editcontact__form-edit">
+          <div className="editcontact__form__header">
+            <h2>Edit Contact</h2>
           </div>
-          <div className="addcontact__form__details-image-container">
+          <div className="editcontact__form__details-image-container">
             {avatar ? (
               <img
-                src=""
+                src={avatar}
                 alt="avatar"
-                className="addcontact__form__details-image"
+                className="editcontact__form__details-image"
               />
             ) : (
-              <span className="addcontact__form__details-avatar-icon">
+              <span className="editcontact__form__details-avatar-icon">
                 <FaUserCircle />
               </span>
             )}
             <label
               htmlFor="avatar"
-              className="addcontact__form__details-avatar-label"
+              className="editcontact__form__details-avatar-label"
             >
-              Select Contact Image
+              Edit Contact Image
             </label>
             <input
               type="file"
               id="avatar"
-              className="addcontact__form__details-avatar-picker"
+              className="editcontact__form__details-avatar-picker"
               onChange={updateAvatar}
               name="avatar"
               accept="image/*"
@@ -150,22 +150,26 @@ const handleAddress = (e) => {
             return (
               <div
                 key={field.name + i}
-                className="addcontact__form__details-container"
+                className="editcontact__form__details-container"
               >
                 <label
                   htmlFor={field.name}
-                  className="addcontact__form__details-label"
+                  className="editcontact__form__details-label"
                 >
                   {field.label} :
                 </label>
                 {field.name === "desc" ? (
                   <textarea
                     id="desc"
-                    className="addcontact__form__details-input desc"
+                    className="editcontact__form__details-input desc"
                     defaultValue={details.description}
                   ></textarea>
                 ) : field.name === "gender" ? (
-                  <select name="gender" id="gender" defaultValue={details.gender}>
+                  <select
+                    name="gender"
+                    id="gender"
+                    defaultValue={details.gender}
+                  >
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
@@ -182,7 +186,7 @@ const handleAddress = (e) => {
                         : null
                     }
                     id={field.name}
-                    className="addcontact__form__details-input"
+                    className="editcontact__form__details-input"
                     type={field.name === "phone" ? "number" : "text"}
                     onChange={
                       field.name === "firstname"
@@ -224,7 +228,7 @@ const handleAddress = (e) => {
           })}
           <button
             type="submit"
-            className="addcontact__form-btn"
+            className="editcontact__form-btn"
             onClick={handleSubmit}
           >
             Save Changes

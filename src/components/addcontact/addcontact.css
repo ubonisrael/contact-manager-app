@@ -159,3 +159,34 @@ border-radius: 4px;
     background: var(--clr-primary);
     border: 1px solid var(--clr-secondary);
 }
+
+
+@media screen and (min-width: 700px) {
+    .addcontact__form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 0.5fr, 1fr, repeat(8, 1fr);
+    }
+
+    .addcontact__form__header{
+        grid-column: 1 / 3;
+        grid-row: 1 / 2;
+        margin: 1rem auto;
+    }
+
+    .addcontact__form__details-image-container {
+        grid-column: 1 / 3;
+    }
+
+    .addcontact__form__details-container-desc {
+        grid-column: 1 / 3;
+        grid-row: 7 / 8;
+        margin: 0 auto;
+    }
+
+    .addcontact__form-btn {
+        grid-column: 2 / 3;
+        grid-row: 8 / 9;
+        margin: 0 auto;
+    }
+}

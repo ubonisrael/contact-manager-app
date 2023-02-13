@@ -16,11 +16,17 @@ const formFields = [
 
 const emailRegex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
 
-const Addcontact = ({ show, avatar, updateAvatar, submit }) => {
-  const [firstname, setFirstname] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [input, setInput] = useState("");
+const Addcontact = ({ close, avatar, updateAvatar, submit }) => {
+  const [details, setDetails] = useState({
+    firstname: '',
+    midname: '',
+    surname: '',
+    email: '',
+    phone: '',
+    gender: '',
+    address: '',
+    description: '',
+  });
 
   const [error, setError] = useState({ firstname: "", phone: "", email: "" });
 
@@ -30,18 +36,21 @@ const Addcontact = ({ show, avatar, updateAvatar, submit }) => {
 
   //function that handles submitting the form ?? passed down from app
   const handleSubmit = (e) => {
+    console.log(emailRegex.test(details.email) && details.email.trim());
+    console.log(emailRegex.test(details.email));
+    console.log(details.email.trim());
     e.preventDefault();
-    if (!firstname.trim()) {
+    if (!details.firstname.trim()) {
       showError("firstname");
       firstRef.current.style.outline = "solid red";
       firstRef.current.focus();
       return;
-    } else if (!phone.trim()) {
+    } else if (!details.phone.trim()) {
       showError("phone");
       phoneRef.current.style.outline = "solid red";
       phoneRef.current.focus();
       return;
-    } else if (emailRegex.test(email) && email.trim()) {
+    } else if (!emailRegex.test(details.email) && details.email.trim()) {
       showError("email");
       emailRef.current.style.outline = "solid red";
       emailRef.current.focus();
@@ -71,31 +80,45 @@ const Addcontact = ({ show, avatar, updateAvatar, submit }) => {
 
   // functions that handle input change forms
   const handleFirstname = (e) => {
-    setFirstname(e.target.value);
+    setDetails({ ...details, firstname: e.target.value });
     if (error.firstname) {
+      firstRef.current.style.outline = "none";
       setError({ ...error, firstname: "" });
     }
   };
   const handlePhone = (e) => {
-    setPhone(e.target.value);
+    setDetails({ ...details, phone: e.target.value });
     if (error.phone) {
+      phoneRef.current.style.outline = "none";
       setError({ ...error, phone: "" });
     }
   };
   const handleEmail = (e) => {
-    setEmail(e.target.value);
+    setDetails({ ...details, email: e.target.value });
     if (error.email) {
+      emailRef.current.style.outline = "none";
       setError({ ...error, email: "" });
     }
   };
-  //other inputs
-  const handleInput = (e) => {
-    setInput(e.target.value);
+
+//other inputs
+
+  const handleMidname = (e) => {
+    setDetails({ ...details, midname: e.target.value });
   };
+
+  const handleSurname = (e) => {
+    setDetails({ ...details, surname: e.target.value });
+  };
+
+  const handleAddress = (e) => {
+    setDetails({ ...details, address: e.target.value });
+  };
+  
   return (
     <div className="addcontact">
       <div className="addcontact__container">
-        <button className="addcontact__container-closebtn" onClick={show}>
+        <button className="addcontact__container-closebtn" onClick={close}>
           <FaTimes />
         </button>
         <form className="addcontact__form">
@@ -105,7 +128,7 @@ const Addcontact = ({ show, avatar, updateAvatar, submit }) => {
           <div className="addcontact__form__details-image-container">
             {avatar ? (
               <img
-                src=""
+                src={avatar}
                 alt="avatar"
                 className="addcontact__form__details-image"
               />
@@ -133,7 +156,7 @@ const Addcontact = ({ show, avatar, updateAvatar, submit }) => {
             return (
               <div
                 key={field.name + i}
-                className="addcontact__form__details-container"
+                className={ field.name === "desc" ? "addcontact__form__details-container addcontact__form__details-container-desc" : 'addcontact__form__details-container'}
               >
                 <label
                   htmlFor={field.name}
@@ -169,28 +192,36 @@ const Addcontact = ({ show, avatar, updateAvatar, submit }) => {
                     onChange={
                       field.name === "firstname"
                         ? handleFirstname
+                        : field.name === "midname"
+                        ? handleMidname
+                        : field.name === "surname"
+                        ? handleSurname
                         : field.name === "phone"
                         ? handlePhone
                         : field.name === "email"
                         ? handleEmail
-                        : handleInput
+                        : handleAddress
                     }
                     value={
                       field.name === "firstname"
-                        ? firstname
-                        : field.name === "phone"
-                        ? phone
-                        : field.name === "email"
-                        ? email
-                        : input
+                      ? details.firstname
+                      : field.name === "midname"
+                      ? details.midname
+                      : field.name === "surname"
+                      ? details.surname
+                      : field.name === "phone"
+                      ? details.phone
+                      : field.name === "email"
+                      ? details.email
+                      : details.address
                     }
                   />
                 )}
-                {field.name === "firstname" ? (
+                {field.name === "firstname" && error.firstname ? (
                   <span className="error">{error.firstname}</span>
-                ) : field.name === "phone" ? (
+                ) : field.name === "phone" && error.phone ? (
                   <span className="error">{error.phone}</span>
-                ) : field.name === "email" ? (
+                ) : field.name === "email" && error.email ? (
                   <span className="error">{error.email}</span>
                 ) : null}
               </div>

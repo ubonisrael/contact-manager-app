@@ -27,7 +27,7 @@
 
 @media screen and (min-width: 800px ) {
     .addcontactbtn__container {
-        bottom: 3rem;
-        right: 3rem;
+        bottom: 1.5rem;
+        right: 1.5rem;
     }
 }

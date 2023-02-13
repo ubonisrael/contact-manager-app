@@ -2,8 +2,11 @@ import React from "react";
 
 import Contactcard from "../contactcard/contactcard";
 import "./contacts.css";
+import { FcDeleteDatabase } from 'react-icons/fc'
 
-const Contactlist = ({ contacts, avatar, delMultiple, edit, del, select, show }) => {
+const Contactlist = ({ contacts, avatar, delMultiple, edit, del, select }) => {
+  console.log(contacts);
+
   return (
     <div className="contactlist">
       <div className="contactlist__header">
@@ -11,7 +14,9 @@ const Contactlist = ({ contacts, avatar, delMultiple, edit, del, select, show })
         <button
           className="contactlist__header-deletemultiple-btn"
           onClick={delMultiple}
-        ></button>
+        >
+          <FcDeleteDatabase />
+        </button>
       </div>
       <div className="contactlist__underline"></div>
       {contacts.length < 1 ? (
@@ -25,7 +30,7 @@ const Contactlist = ({ contacts, avatar, delMultiple, edit, del, select, show })
             return (
               <Contactcard
                 key={i}
-                contacts={contacts}
+                contact={contact}
 avatar={avatar}
                 edit={edit}
                 del={del}

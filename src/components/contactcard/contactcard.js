@@ -14,13 +14,17 @@ const Contactcard = ({ contact, index, edit, del, select }) => {
   };
 
   //Function that handles the event when the dropdown button is clicked
-  const handleDropdown = e => {
-e.stopPropagation()
+  const handleDropdown = (e) => {
+    e.stopPropagation();
     dropdownRef.current.classList.toggle("dropped");
   };
 
   return (
-    <div ref={cardRef} className="contactcard" onClick={()=>handleSelect(index)}>
+    <div
+      ref={cardRef}
+      className="contactcard"
+      onClick={() => handleSelect(index)}
+    >
       <div className="contactcard__avatarcontainer">
         {contact.avatar ? (
           <img
@@ -39,27 +43,31 @@ e.stopPropagation()
           {contact.firstname} {contact.midname} {contact.surname}
         </h4>
         <h4 className="contactcard__details-phone">{contact.phone}</h4>
-      </div>
-      <div className="contactcard__details-btns-container">
+        <div className="contactcard__details-btns-container">
         <button className="contactcard__details-btn" onClick={handleDropdown}>
           dropdown
         </button>
         <button
           className="contactcard__details-btn"
-          onClick={e => {
-e.stopPropagation()
-edit(index)}
-}
+          onClick={(e) => {
+            e.stopPropagation();
+            edit(index);
+          }}
         >
           edit
         </button>
-        <button className="contactcard__details-btn" onClick={(e) => {
-e.stopPropagation()
-del(index)}
-}>
+        <button
+          className="contactcard__details-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            del(index);
+          }}
+        >
           delete
         </button>
-        <button className="contactcard__details-btn" disabled>marked</button>
+        <button className="contactcard__details-btn" disabled>
+          marked
+        </button>
       </div>
       <div className="contactcard__details-underline"></div>
       <div ref={dropdownRef} className="contactcard__details__other">
@@ -69,6 +77,7 @@ del(index)}
         <p className="contactcard__details__other-item">
           {contact.description}
         </p>
+      </div>
       </div>
     </div>
   );
