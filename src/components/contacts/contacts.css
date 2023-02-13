@@ -2,6 +2,7 @@
   width: 90%;
   height: 100%;
   min-height: 60vh;
+  padding-bottom: 1rem;
   margin: 1rem auto;
   border-radius: var(--radius);
   background: var(--clr-secondarybg);
@@ -39,6 +40,10 @@
 .contactlist__empty {
     margin: 0.25rem;
     padding: 0.5rem;
+}
+.contactlist__container {
+  display: grid;
+  place-items: center;
 }
 
 @media screen and (min-width: 600px) {

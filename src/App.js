@@ -16,7 +16,7 @@ import Contactlist from "./components/contacts/contacts";
 import Addcontactbtn from "./components/addcontactbtn/addcontactbtn";
 import Addcontact from "./components/addcontact/addcontact";
 import Editcontact from "./components/edit/edit";
-import { setDoc, collection, serverTimestamp } from "firebase/firestore";
+import { setDoc, collection, serverTimestamp, doc } from "firebase/firestore";
 
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 const currentTheme = localStorage.getItem("theme");
@@ -39,6 +39,7 @@ function IDgen() {
 
 function App() {
   const [user] = useAuthState(auth);
+  // const [userDetails, setUserDetails] = useState({})
   const [contacts, setContacts] = useState(list);
   const [theme, setTheme] = useState();
   const [showForm, setShowForm] = useState(false);
@@ -47,11 +48,22 @@ function App() {
   const [avatar, setAvatar] = useState();
   const [selected, setSelect] = useState([]);
 
-  const { uid, displayName, photoURL } = user;
-
   //Handles add contact
-  const handleAddContact = () => {
+  const handleAddContact = async() => {
     const form = document.forms[0];
+    const userId = user.uid
+    const contactID = `${form.phone.value}A${IDgen()}`
+    const contact = {
+      firstname: form.firstname.value,
+      midname: form.midname.value,
+      surname: form.surname.value,
+      telephone: form.phone.value,
+      email: form.email.value,
+      gender: form.gender.value,
+      address: form.address.value,
+      description: form.desc.value,
+      ID: contactID,
+    }
     setContacts([
       ...contacts,
       {
@@ -63,10 +75,15 @@ function App() {
         gender: form.gender.value,
         address: form.address.value,
         description: form.desc.value,
-        ID: `${form.phone.value}A${IDgen()}`,
+        ID: contactID,
+        avatar: avatar
       },
     ]);
+
+    await setDoc(doc(db, 'users', userId, 'contacts', contactID), contact)
+
     showAddContact();
+    setAvatar()
   };
 
   //handles editing contacts
@@ -107,11 +124,14 @@ function App() {
     );
 
     showEdit();
+    setAvatar()
   };
 
   //handles the deletion of a single contact
   const handleDelete = (i) => {
+    console.log(i);
     const contactIndex = contacts.findIndex((contact) => contact.ID === i);
+    console.log(contactIndex);
     setContacts((prev) =>
       prev.slice(0, contactIndex).concat(prev.slice(1 + contactIndex))
     );
@@ -119,24 +139,19 @@ function App() {
 
   //handles the deletion of multiple contacts
   const handleDeleteMultiple = () => {
-    const newContacts = contacts.filter((contact, i) => {
-      if (selected.indexOf(contact.ID) < 0) {
-        return contact;
-      }
-    });
+    console.log('clicked');
+    const newContacts = contacts.filter((contact, i) => selected.indexOf(contact.ID) < 0);
     setContacts(newContacts);
     setSelect([]);
   };
 
   //handles the selection of a contact
   const handleSelect = (i) => {
-    const contactIndex = contacts.findIndex((contact) => contact.ID === i);
-    if (selected.indexOf(contactIndex)) {
-      setSelect((prev) =>
-        prev.slice(0, contactIndex).concat(prev.slice(1 + contactIndex))
+    if (selected.indexOf(i) >= 0) {
+      setSelect((prev) => prev.filter(item => item !== i)
       );
     } else {
-      setSelect([...selected, contactIndex]);
+      setSelect([...selected, i]);
     }
   };
 
@@ -152,8 +167,9 @@ function App() {
 
   //function handling the image file upload and display
   const updateAvatar = () => {
-    const avatar = document.querySelector(".avatar");
-    const avatarFile = avatar.files;
+    const avatar = document.querySelector(".addcontact__form__details-avatar-picker");
+    console.log(avatar, avatar.files[0])
+    const avatarFile = avatar.files[0];
     const avatarSrc = URL.createObjectURL(avatarFile);
     setAvatar(avatarSrc);
   };
@@ -162,6 +178,7 @@ function App() {
   const handleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     await signInWithRedirect(auth, provider);
+    // setUserDetails({userID: user.uid, displayName:user.displayName, userAvatar: user.photoURL})
     const res = await getRedirectResult(auth);
     if (res) {
       if (res.additionalUserInfo.isNewUser) {
@@ -212,16 +229,18 @@ function App() {
             theme={theme}
             handleTheme={handleTheme}
             handleLogOut={handleLogOut}
-            displayName={displayName}
-            photoURL={photoURL}
+            displayName={user.displayName}
+            photoURL={user.photoURL}
           />
           <Contactlist
             contacts={contacts}
             avatar={avatar}
             delMultiple={handleDeleteMultiple}
             del={handleDelete}
+            edit={handleEdit}
             select={handleSelect}
             show={showAddContact}
+            selected={selected}
           />
           <Addcontactbtn addcontact={showAddContact} />
           {showForm ? (

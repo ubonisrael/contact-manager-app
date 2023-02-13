@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { FaTimes, FaUserCircle } from "react-icons/fa";
+import { IoIosClose } from 'react-icons/io'
 
 import "./addcontact.css";
 
@@ -18,14 +19,14 @@ const emailRegex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
 
 const Addcontact = ({ close, avatar, updateAvatar, submit }) => {
   const [details, setDetails] = useState({
-    firstname: '',
-    midname: '',
-    surname: '',
-    email: '',
-    phone: '',
-    gender: '',
-    address: '',
-    description: '',
+    firstname: "",
+    midname: "",
+    surname: "",
+    email: "",
+    phone: "",
+    gender: "",
+    address: "",
+    description: "",
   });
 
   const [error, setError] = useState({ firstname: "", phone: "", email: "" });
@@ -36,9 +37,6 @@ const Addcontact = ({ close, avatar, updateAvatar, submit }) => {
 
   //function that handles submitting the form ?? passed down from app
   const handleSubmit = (e) => {
-    console.log(emailRegex.test(details.email) && details.email.trim());
-    console.log(emailRegex.test(details.email));
-    console.log(details.email.trim());
     e.preventDefault();
     if (!details.firstname.trim()) {
       showError("firstname");
@@ -101,7 +99,7 @@ const Addcontact = ({ close, avatar, updateAvatar, submit }) => {
     }
   };
 
-//other inputs
+  //other inputs
 
   const handleMidname = (e) => {
     setDetails({ ...details, midname: e.target.value });
@@ -114,7 +112,7 @@ const Addcontact = ({ close, avatar, updateAvatar, submit }) => {
   const handleAddress = (e) => {
     setDetails({ ...details, address: e.target.value });
   };
-  
+
   return (
     <div className="addcontact">
       <div className="addcontact__container">
@@ -156,7 +154,13 @@ const Addcontact = ({ close, avatar, updateAvatar, submit }) => {
             return (
               <div
                 key={field.name + i}
-                className={ field.name === "desc" ? "addcontact__form__details-container addcontact__form__details-container-desc" : 'addcontact__form__details-container'}
+                className={
+                  field.name === "desc"
+                    ? "addcontact__form__details-container addcontact__form__details-container-desc"
+                    : field.name === "address"
+                    ? "addcontact__form__details-container addcontact__form__details-container-address"
+                    : "addcontact__form__details-container"
+                }
               >
                 <label
                   htmlFor={field.name}
@@ -165,12 +169,9 @@ const Addcontact = ({ close, avatar, updateAvatar, submit }) => {
                   {field.label} :
                 </label>
                 {field.name === "desc" ? (
-                  <textarea
-                    id="desc"
-                    className="addcontact__form__details-input desc"
-                  ></textarea>
+                  <textarea id="desc" className=" desc" maxLength='50'></textarea>
                 ) : field.name === "gender" ? (
-                  <select name="gender" id="gender">
+                  <select name="gender" id="gender" className="gender">
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
@@ -204,16 +205,16 @@ const Addcontact = ({ close, avatar, updateAvatar, submit }) => {
                     }
                     value={
                       field.name === "firstname"
-                      ? details.firstname
-                      : field.name === "midname"
-                      ? details.midname
-                      : field.name === "surname"
-                      ? details.surname
-                      : field.name === "phone"
-                      ? details.phone
-                      : field.name === "email"
-                      ? details.email
-                      : details.address
+                        ? details.firstname
+                        : field.name === "midname"
+                        ? details.midname
+                        : field.name === "surname"
+                        ? details.surname
+                        : field.name === "phone"
+                        ? details.phone
+                        : field.name === "email"
+                        ? details.email
+                        : details.address
                     }
                   />
                 )}

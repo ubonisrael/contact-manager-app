@@ -78,6 +78,18 @@ p {
     color: var(--clr-text);
 }
 
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 @media screen and (min-width: 800px) {
     body {
         font-size: 1rem;

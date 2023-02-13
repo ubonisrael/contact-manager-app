@@ -16,13 +16,13 @@ const formFields = [
 
 const emailRegex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
 
-const Editcontact = ({ contact, show, avatar, updateAvatar, submit }) => {
+const Editcontact = ({ contact, close, avatar, updateAvatar, submit }) => {
   const [details, setDetails] = useState({
     firstname: contact.firstname,
     midname: contact.midname,
-    surname: contact.firstname,
+    surname: contact.surname,
     email: contact.email,
-    phone: contact.phone,
+    phone: contact.telephone,
     gender: contact.gender,
     address: contact.address,
     description: contact.description,
@@ -47,7 +47,7 @@ const Editcontact = ({ contact, show, avatar, updateAvatar, submit }) => {
       phoneRef.current.style.outline = "solid red";
       phoneRef.current.focus();
       return;
-    } else if (emailRegex.test(details.email) && details.email.trim()) {
+    } else if (!emailRegex.test(details.email) && details.email.trim()) {
       showError("email");
       emailRef.current.style.outline = "solid red";
       emailRef.current.focus();
@@ -79,18 +79,21 @@ const Editcontact = ({ contact, show, avatar, updateAvatar, submit }) => {
   const handleFirstname = (e) => {
     setDetails({ ...details, firstname: e.target.value });
     if (error.firstname) {
+      firstRef.current.style.outline = "none";
       setError({ ...error, firstname: "" });
     }
   };
   const handlePhone = (e) => {
     setDetails({ ...details, phone: e.target.value });
     if (error.phone) {
+      phoneRef.current.style.outline = "none";
       setError({ ...error, phone: "" });
     }
   };
   const handleEmail = (e) => {
     setDetails({ ...details, email: e.target.value });
     if (error.email) {
+      emailRef.current.style.outline = "none";
       setError({ ...error, email: "" });
     }
   };
@@ -112,10 +115,13 @@ const Editcontact = ({ contact, show, avatar, updateAvatar, submit }) => {
   return (
     <div className="editcontact">
       <div className="editcontact__container">
-        <button className="editcontact__container-closebtn" onClick={show}>
+        <button className="editcontact__container-closebtn" onClick={close}>
           <FaTimes />
         </button>
-        <form className="editcontact__form-edit">
+        {/* <button>
+          <IoClose />
+        </button> */}
+        <form className="editcontact__form">
           <div className="editcontact__form__header">
             <h2>Edit Contact</h2>
           </div>
@@ -150,7 +156,13 @@ const Editcontact = ({ contact, show, avatar, updateAvatar, submit }) => {
             return (
               <div
                 key={field.name + i}
-                className="editcontact__form__details-container"
+                className={
+                  field.name === "desc"
+                    ? "editcontact__form__details-container editcontact__form__details-container-desc"
+                    : field.name === "address"
+                    ? "editcontact__form__details-container editcontact__form__details-container-address"
+                    : "editcontact__form__details-container"
+                }
               >
                 <label
                   htmlFor={field.name}
@@ -216,11 +228,11 @@ const Editcontact = ({ contact, show, avatar, updateAvatar, submit }) => {
                     }
                   />
                 )}
-                {field.name === "firstname" ? (
+                {field.name === "firstname" && error.firstname ? (
                   <span className="error">{error.firstname}</span>
-                ) : field.name === "phone" ? (
+                ) : field.name === "phone" && error.phone ? (
                   <span className="error">{error.phone}</span>
-                ) : field.name === "email" ? (
+                ) : field.name === "email" && error.email ? (
                   <span className="error">{error.email}</span>
                 ) : null}
               </div>

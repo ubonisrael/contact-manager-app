@@ -1,50 +1,82 @@
 .contactcard {
-width:90%;
-height: 8rem;
-padding: 1rem;
-margin: 1rem;
-display: flex;
-flex-direction: row;
-align-items: center;
-justify-content: flex-start;
-background: var(--clr-tertiarybg);
-border-radius: var(--radius);
+  width: 90%;
+  min-height: 8rem;
+  padding: 1rem;
+  margin: 1rem;
+  background: var(--clr-tertiarybg);
+  border-radius: var(--radius);
+}
+
+.selected {
+  background: var(--clr-primarybg);
+  border: 1px solid var(--clr-secondary);
+}
+
+.contactcard__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .contactcard__avatarcontainer {
-width: 5rem;
-height:5rem;
-padding:0.5rem;
-border: 1px solid var(--clr-secondary)
+  width: 5rem;
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
 }
 
-.contactcard__avatarcontainer-img {
-max-width:100%;
+.contactcard__avatarcontainer__img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: var(--radius);
+}
+
+.contactcard__avatarcontainer-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
 }
 
 .contactcard__details {
-width:100%;
-height:100%;
-padding:0.5rem
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem 0;
 }
 
-.contactcard__details-names {}
+.contactcard__details-btn {
+  font-size: 1rem;
+  color: var(--clr-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
 
-.contactcard__details-phone {}
+.contactcard__details-btn:hover {
+  background: var(--clr-secondary);
+  color: var(--clr-primary);
+}
 
-.contactcard__details__btncontainer {}
-
-.contactcard__details__btncontainer-btn {}
-
-.contactcard__details__underline {
-width: 100%;
-height: 2px;
-background: var(--clr-secondary)
+.contactcard__details-underline {
+  width: 100%;
+  height: 2px;
+  background: var(--clr-secondary);
 }
 
 .contactcard__details__other {
-height: 0;
-overflow:hidden;
+  height: 0;
+  overflow: hidden;
+  transition: var(--transition);
 }
 
-.contactcard__details__other-item {}
+.dropped {
+  height: 9rem;
+}
+
+.contactcard__details__other-item {
+  padding: 0.25rem;
+}
