@@ -1,11 +1,10 @@
-import React from "react";
+import React, {memo} from "react";
 
 import Contactcard from "../contactcard/contactcard";
 import "./contacts.css";
 import { FcDeleteDatabase } from "react-icons/fc";
 
-const Contactlist = ({ contacts, avatar, delMultiple, edit, del, select, selected }) => {
-  console.log(contacts);
+const Contactlist = ({ contacts, delMultiple, edit, del, select, selected }) => {
 
   return (
     <div className="contactlist">
@@ -32,7 +31,6 @@ const Contactlist = ({ contacts, avatar, delMultiple, edit, del, select, selecte
               <Contactcard
                 key={i}
                 contact={contact}
-                avatar={avatar}
                 edit={edit}
                 del={del}
                 select={select}
@@ -45,4 +43,4 @@ const Contactlist = ({ contacts, avatar, delMultiple, edit, del, select, selecte
   );
 };
 
-export default Contactlist;
+export default memo(Contactlist);

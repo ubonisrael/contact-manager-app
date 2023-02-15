@@ -4,11 +4,10 @@ import { storage } from "./firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
   onAuthStateChanged,
+  signInWithRedirect,
 } from "firebase/auth";
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import "./App.css";
 import Welcome from "./components/welcome/welcome";
 import Navbar from "./components/navbar/navbar";
@@ -16,18 +15,27 @@ import Contactlist from "./components/contacts/contacts";
 import Addcontactbtn from "./components/addcontactbtn/addcontactbtn";
 import Addcontact from "./components/addcontact/addcontact";
 import Editcontact from "./components/edit/edit";
-import { setDoc, collection, serverTimestamp, doc } from "firebase/firestore";
+import {
+  query,
+  setDoc,
+  collection,
+  doc,
+  onSnapshot,
+  deleteDoc,
+  writeBatch,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import Spinner from "./components/spinner/spinner";
 
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 const currentTheme = localStorage.getItem("theme");
 
 if (currentTheme === "dark") {
   document.body.classList.toggle("dark-theme");
-} else if (currentTheme === "dark") {
+} else if (currentTheme === "light") {
   document.body.classList.toggle("light-theme");
 }
-
-let list = [];
 
 function IDgen() {
   let id = "";
@@ -39,8 +47,8 @@ function IDgen() {
 
 function App() {
   const [user] = useAuthState(auth);
-  // const [userDetails, setUserDetails] = useState({})
-  const [contacts, setContacts] = useState(list);
+  const [isLoading, setIsLoading] = useState(false);
+  const [contacts, setContacts] = useState([]);
   const [theme, setTheme] = useState();
   const [showForm, setShowForm] = useState(false);
   const [showEditForm, setEditForm] = useState(false);
@@ -49,10 +57,9 @@ function App() {
   const [selected, setSelect] = useState([]);
 
   //Handles add contact
-  const handleAddContact = async() => {
+  const handleAddContact = async () => {
     const form = document.forms[0];
-    const userId = user.uid
-    const contactID = `${form.phone.value}A${IDgen()}`
+    const contactID = `${form.phone.value}A${IDgen()}`;
     const contact = {
       firstname: form.firstname.value,
       midname: form.midname.value,
@@ -63,27 +70,13 @@ function App() {
       address: form.address.value,
       description: form.desc.value,
       ID: contactID,
-    }
-    setContacts([
-      ...contacts,
-      {
-        firstname: form.firstname.value,
-        midname: form.midname.value,
-        surname: form.surname.value,
-        telephone: form.phone.value,
-        email: form.email.value,
-        gender: form.gender.value,
-        address: form.address.value,
-        description: form.desc.value,
-        ID: contactID,
-        avatar: avatar
-      },
-    ]);
+      avatar: avatar ? avatar : "",
+    };
 
-    await setDoc(doc(db, 'users', userId, 'contacts', contactID), contact)
+    await setDoc(doc(db, "users", user.uid, "contacts", contactID), contact);
 
     showAddContact();
-    setAvatar()
+    setAvatar();
   };
 
   //handles editing contacts
@@ -91,6 +84,7 @@ function App() {
     const contact = contacts.find((contact) => contact.ID === i);
     setEdit(contact);
     showEdit();
+    setAvatar(contact.avatar);
   };
 
   //Toggles the display of the edit form
@@ -99,7 +93,7 @@ function App() {
   };
 
   //handles submission of edited contact
-  const handleEditContact = () => {
+  const handleEditContact = async () => {
     const form = document.forms[0];
     const editedContact = {
       firstname: form.firstname.value,
@@ -111,93 +105,115 @@ function App() {
       address: form.address.value,
       description: form.desc.value,
       ID: editContact.ID,
+      avatar: avatar ? avatar : "",
     };
 
-    setContacts((prev) =>
-      prev.map((contact, i) => {
-        if (contact.ID === editedContact.ID) {
-          return editedContact;
-        } else {
-          return contact;
-        }
-      })
+    const contactID = editContact.ID;
+
+    await setDoc(
+      doc(db, "users", user.uid, "contacts", contactID),
+      editedContact
     );
 
     showEdit();
-    setAvatar()
+    setAvatar();
   };
 
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const q = query(collection(db, "users", user.uid, "contacts"));
+
+    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+      let contactlist = [];
+      QuerySnapshot.forEach((doc) => {
+        contactlist.push(doc.data());
+      });
+      setContacts(contactlist);
+    });
+
+    return () => unsubscribe;
+  }, [user]);
+
   //handles the deletion of a single contact
-  const handleDelete = (i) => {
-    console.log(i);
-    const contactIndex = contacts.findIndex((contact) => contact.ID === i);
-    console.log(contactIndex);
-    setContacts((prev) =>
-      prev.slice(0, contactIndex).concat(prev.slice(1 + contactIndex))
-    );
+  const handleDelete = async (i) => {
+    await deleteDoc(doc(db, "users", user.uid, "contacts", i));
   };
 
   //handles the deletion of multiple contacts
-  const handleDeleteMultiple = () => {
-    console.log('clicked');
-    const newContacts = contacts.filter((contact, i) => selected.indexOf(contact.ID) < 0);
-    setContacts(newContacts);
+  const handleDeleteMultiple = async () => {
+    const batch = writeBatch(db);
+
+    //get the contacts to be deleted
+    const contactsQuery = query(
+      collection(db, "users", user.uid, "contacts"),
+      where("ID", "in", [...selected])
+    );
+    const contactsQuerySnapshot = await getDocs(contactsQuery);
+    contactsQuerySnapshot.forEach((doc) => batch.delete(doc.ref));
+
+    batch.commit();
     setSelect([]);
   };
 
   //handles the selection of a contact
   const handleSelect = (i) => {
     if (selected.indexOf(i) >= 0) {
-      setSelect((prev) => prev.filter(item => item !== i)
-      );
+      setSelect((prev) => prev.filter((item) => item !== i));
     } else {
       setSelect([...selected, i]);
     }
   };
 
-  //Sets contact to local storage
-  useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
-  }, [contacts]);
-
   //function handles the contact form will be displayed
   const showAddContact = () => {
     setShowForm((prev) => !prev);
+    setAvatar();
   };
 
   //function handling the image file upload and display
-  const updateAvatar = () => {
-    const avatar = document.querySelector(".addcontact__form__details-avatar-picker");
-    console.log(avatar, avatar.files[0])
-    const avatarFile = avatar.files[0];
-    const avatarSrc = URL.createObjectURL(avatarFile);
-    setAvatar(avatarSrc);
+  const updateAvatar = (e) => {
+    const avatarFile = e.target.files[0];
+    if (!avatarFile) return;
+
+    const storageRef = ref(
+      storage,
+      `cmanager/${user.uid}/${user.uid}${IDgen()}`
+    );
+
+    const uploadTask = uploadBytesResumable(storageRef, avatarFile);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      },
+      (error) => {
+        alert(error);
+      },
+      () =>
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log(downloadURL);
+          setAvatar(downloadURL);
+        })
+    );
   };
 
   // function handles signing in event
   const handleSignIn = async () => {
+    setIsLoading(true);
     const provider = new GoogleAuthProvider();
     await signInWithRedirect(auth, provider);
-    // setUserDetails({userID: user.uid, displayName:user.displayName, userAvatar: user.photoURL})
-    const res = await getRedirectResult(auth);
-    if (res) {
-      if (res.additionalUserInfo.isNewUser) {
-        const userId = res.user.id;
-        const userData = {
-          displayName: res.user.displayName,
-          email: res.user.email,
-          photoURL: res.user.photoURL,
-        };
-        db.collection("users")
-          .doc(userId)
-          .set(userData)
-          .then(() => console.log("added user", userId, " to db"))
-          .catch((e) =>
-            console.log("error adding user", userId, " to db", e.message)
-          );
-      }
-    }
   };
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setIsLoading(false);
+    }
+  });
 
   //function that handles logging out user
   const handleLogOut = () => {
@@ -206,6 +222,7 @@ function App() {
 
   //function handles toggling theme event
   const handleTheme = () => {
+    console.log("theme btn clicked");
     if (prefersDarkScheme.matches) {
       document.body.classList.toggle("light-theme");
       setTheme(
@@ -223,50 +240,52 @@ function App() {
 
   return (
     <div>
-      {user ? (
-        <>
-          <Navbar
+      {isLoading && !user ? (
+        <Spinner />
+      )
+        : !isLoading && user ? (
+          <>
+            <Navbar
+              theme={theme}
+              handleTheme={handleTheme}
+              handleLogOut={handleLogOut}
+              displayName={user.displayName}
+              photoURL={user.photoURL}
+            />
+            <Contactlist
+              contacts={contacts}
+              delMultiple={handleDeleteMultiple}
+              del={handleDelete}
+              edit={handleEdit}
+              select={handleSelect}
+              show={showAddContact}
+              selected={selected}
+            />
+            <Addcontactbtn addcontact={showAddContact} />
+            {showForm ? (
+              <Addcontact
+                close={showAddContact}
+                avatar={avatar}
+                updateAvatar={updateAvatar}
+                submit={handleAddContact}
+              />
+            ) : null}
+            {showEditForm ? (
+              <Editcontact
+                contact={editContact}
+                close={showEdit}
+                avatar={avatar}
+                submit={handleEditContact}
+              />
+            ) : null}
+            </> )
+        : (
+          <Welcome
+            signin={handleSignIn}
             theme={theme}
             handleTheme={handleTheme}
-            handleLogOut={handleLogOut}
-            displayName={user.displayName}
-            photoURL={user.photoURL}
           />
-          <Contactlist
-            contacts={contacts}
-            avatar={avatar}
-            delMultiple={handleDeleteMultiple}
-            del={handleDelete}
-            edit={handleEdit}
-            select={handleSelect}
-            show={showAddContact}
-            selected={selected}
-          />
-          <Addcontactbtn addcontact={showAddContact} />
-          {showForm ? (
-            <Addcontact
-              close={showAddContact}
-              avatar={avatar}
-              updateAvatar={updateAvatar}
-              submit={handleAddContact}
-            />
-          ) : null}
-          {showEditForm ? (
-            <Editcontact
-              contact={editContact}
-              close={showEdit}
-              avatar={avatar}
-              submit={handleEditContact}
-            />
-          ) : null}
-        </>
-      ) : (
-        <Welcome
-          signin={handleSignIn}
-          theme={theme}
-          handleTheme={handleTheme}
-        />
-      )}
+        )}
     </div>
   );
 }

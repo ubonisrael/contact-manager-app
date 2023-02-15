@@ -16,7 +16,7 @@ const formFields = [
 
 const emailRegex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
 
-const Editcontact = ({ contact, close, avatar, updateAvatar, submit }) => {
+const Editcontact = ({ contact, close, updateAvatar, submit, avatar, nullAvatar }) => {
   const [details, setDetails] = useState({
     firstname: contact.firstname,
     midname: contact.midname,
@@ -118,9 +118,6 @@ const Editcontact = ({ contact, close, avatar, updateAvatar, submit }) => {
         <button className="editcontact__container-closebtn" onClick={close}>
           <FaTimes />
         </button>
-        {/* <button>
-          <IoClose />
-        </button> */}
         <form className="editcontact__form">
           <div className="editcontact__form__header">
             <h2>Edit Contact</h2>
@@ -147,6 +144,7 @@ const Editcontact = ({ contact, close, avatar, updateAvatar, submit }) => {
               type="file"
               id="avatar"
               className="editcontact__form__details-avatar-picker"
+              onClick={e => {console.log(e); e.target.value = ''}}
               onChange={updateAvatar}
               name="avatar"
               accept="image/*"
@@ -180,6 +178,7 @@ const Editcontact = ({ contact, close, avatar, updateAvatar, submit }) => {
                   <select
                     name="gender"
                     id="gender"
+                    className="gender"
                     defaultValue={details.gender}
                   >
                     <option value="male">Male</option>
