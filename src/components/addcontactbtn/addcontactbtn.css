@@ -1,0 +1,33 @@
+.addcontactbtn__container {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+}
+
+.addcontact-btn {
+    display: flex;
+    align-items: center;
+    color: var(--clr-secondary);
+    background: transparent;
+    font-size: 3rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.addcontact-btn:hover {
+    color: var(--clr-primary);
+    border: 2px solid var(--clr-secondary);
+}
+
+/* @keyframes identifier {
+    
+} */
+
+@media screen and (min-width: 800px ) {
+    .addcontactbtn__container {
+        bottom: 1.5rem;
+        right: 1.5rem;
+    }
+}

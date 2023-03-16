@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Itim&family=Roboto&display=swap');
+
+:root {
+    --ff-primary: 'Itim', sans-serif;
+    --ff-secondary: 'Roboto', sans-serif;
+    --radius: 8px;
+    --transition: all 0.3s linear;
+    --light-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+    --max-width: 700px;
+    --spacing:0.1rem;
+    --clr-red: red;
+}
+
+*, ::after, ::before {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    --clr-text: rgb(4, 1, 27);
+    --clr-primarybg: rgb(165, 193, 197);
+    --clr-secondarybg: rgb(205, 223, 226);
+    --clr-tertiarybg: rgb(240, 243, 245);
+    --clr-primary: rgb(222, 230, 236);
+    --clr-secondary: black;
+}
+
+body {
+    font-family: var(--ff-primary);
+    background: var(--clr-primarybg);
+    color: var(--clr-text);
+    font-size: 0.8rem;
+}
+
+body.dark-theme {
+    --clr-text: rgb(221, 220, 235);
+    --clr-primarybg: rgb(1, 9, 19);
+    --clr-secondarybg: rgb(7, 23, 43);
+    --clr-tertiarybg: rgb(25, 53, 87);
+    --clr-secondary: rgb(222, 230, 236);
+    --clr-primary: rgb(0, 0, 0);
+}
+
+ul {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    padding: 0.5rem;
+    color: var(--clr-text);
+}
+
+h1, h2, h3, h4 {
+    letter-spacing: var(--spacing);
+    text-transform: capitalize;
+    line-height: 1.25;
+    font-family: var(--ff-primary);
+}
+
+h1 {
+    font-size: 2.75rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1rem;
+}
+
+h4 {
+    font-size: 0.8rem;
+}
+
+p {
+    color: var(--clr-text);
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+@media screen and (min-width: 800px) {
+    body {
+        font-size: 1rem;
+    }
+
+    h1, h2, h3, h4 {
+        line-height: 1;
+    }
+    
+    h1 {
+        font-size: 4rem;
+    }
+    
+    h2 {
+        font-size: 2.5rem;
+    }
+    
+    h3 {
+        font-size: 1.75rem;
+    }
+    
+    h4 {
+        font-size: 1rem;
+    }
+}
+
+@media (prefers-color-sheme: dark) {
+    /* defaults to dark theme */
+    body {
+        --clr-text: rgb(221, 220, 235);
+    --clr-primarybg: rgb(1, 9, 19);
+    --clr-secondarybg: rgb(7, 23, 43);
+    --clr-tertiarybg: rgb(25, 53, 87);
+    --clr-secondary: rgb(222, 230, 236);
+    --clr-primary: black;
+    }
+
+    body.light-theme {
+        --clr-text: rgb(4, 1, 27);
+    --clr-primarybg: rgb(165, 193, 197);
+    --clr-secondarybg: rgb(205, 223, 226);
+    --clr-tertiarybg: rgb(222, 230, 236);
+    --clr-primary: rgb(222, 230, 236);
+    --clr-secondary: black;
+    }
+}

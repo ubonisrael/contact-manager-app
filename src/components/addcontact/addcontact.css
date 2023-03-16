@@ -1,0 +1,210 @@
+.addcontact {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  transition: var(--transition);
+  z-index: 99;
+  background: var(--clr-primary);
+}
+
+.addcontact__container {
+  width: 80vw;
+  max-width: var(--max-width);
+  height: 80vh;
+  padding: 1rem;
+  background: var(--clr-secondarybg);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  mask-image: linear-gradient(to top, transparent, black),
+    linear-gradient(to left, transparent 4px, black 4px);
+  mask-size: 100% 200000px;
+  mask-position: left bottom;
+  transition: mask position 0.3s;
+}
+
+.addcontact__container:hover {
+  mask-position: left top;
+}
+
+.addcontact__container::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* .addcontact__container::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 4px var(--clr-secondary);
+    border-radius: var(--radius)
+} */
+
+.addcontact__container::-webkit-scrollbar-thumb {
+  border-radius: var(--radius);
+  -webkit-box-shadow: inset 0 0 4px var(--clr-secondary);
+}
+
+.addcontact__container-closebtn {
+  font-size: 2rem;
+  color: var(--clr-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.addcontact__container-closebtn:hover {
+  color: var(--clr-red);
+  transform: scale(1.2);
+}
+
+.addcontact__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.addcontact__form__header {
+  margin-top: 2rem;
+}
+
+.addcontact__form__header h2 {
+  text-transform: capitalize;
+}
+
+.addcontact__form__details-image-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.addcontact__form__details-image {
+  max-width: 100%;
+  padding: 1rem;
+}
+
+.addcontact__form__details-avatar-label {
+  width: 10rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  place-items: center;
+  border-radius: var(--radius);
+  background: var(--clr-secondary);
+  color: var(--clr-primary);
+  cursor: pointer;
+}
+
+.addcontact__form__details-avatar-label:hover {
+  background: var(--clr-primary);
+  color: var(--clr-secondary);
+  border: 1px solid var(--clr-secondary);
+}
+
+.addcontact__form__details-avatar-icon {
+  font-size: 4rem;
+  margin: 0.5rem 0;
+}
+
+.addcontact__form__details-avatar-picker {
+  opacity: 0;
+}
+
+.addcontact__form__details-container {
+  width: 90%;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  background: var(--clr-tertiarybg);
+}
+
+.addcontact__form__details-input {
+  padding-left: 0.25rem;
+  height: 1.5rem;
+  border: none;
+  border-radius: 4px;
+}
+
+.gender {
+  height: 1.5rem;
+  border: none;
+  border-radius: 4px;
+}
+
+.desc {
+  height: 6rem;
+  width: 100%;
+  border: none;
+}
+
+.error {
+  width: 100%;
+  margin-top: 8px;
+  color: white;
+  background: red;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.addcontact__form-btn {
+  width: 6rem;
+  height: 2rem;
+  padding: 0.5rem;
+  margin: 1rem;
+  border: none;
+  color: var(--clr-primary);
+  background: var(--clr-secondary);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.addcontact__form-btn:hover {
+  color: var(--clr-secondary);
+  background: var(--clr-primary);
+  border: 1px solid var(--clr-secondary);
+}
+
+@media screen and (min-width: 700px) {
+  .addcontact__form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 0.5fr, 1fr, repeat(8, 1fr);
+  }
+
+  .addcontact__form__header {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+    margin: 1rem auto;
+  }
+
+  .addcontact__form__details-image-container {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+    margin: 1rem auto;
+  }
+
+  .addcontact__form__details-container {
+    margin: 1rem auto;
+  }
+
+  .addcontact__form__details-container-address {
+    grid-row: 6 / 7;
+    grid-column: 1 / 3;
+  }
+
+  .addcontact__form__details-container-desc {
+    grid-column: 1 / 3;
+    grid-row: 7 / 8;
+  }
+
+  .addcontact__form-btn {
+    grid-column: 2 / 3;
+    grid-row: 8 / 9;
+    margin: 1rem auto;
+  }
+}
